@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="true" scan="true" scanPeriod="30 seconds">
+
+    <property name="LOG_LEVEL" value="INFO" />
+    <property name="LOGS_ABSOLUTE_PATH" value="./logs" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight[%-5level] %cyan([%logger{30}]) - %msg%n%ex
+            </Pattern>
+            <!--            <Pattern>%d{HH:mm:ss.SSS} %highlight([%-5level]) [%thread] %cyan([%logger{36}]) - %m%n</Pattern>-->
+        </layout>
+    </appender>
+
+    <appender name="CONSOLE-ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <appender name="CONSOLE-ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="CONSOLE" />
+    </appender>
+
+    <logger name="org.springframework" level="INFO"/>
+
+    <logger name="yhkim.crawler" level="INFO"/>
+
+
+    <!--
+    jdbc.sqlonly    : Logs only SQL
+    jdbc.sqltiming  : Logs the SQL, post-execution, including timing execution statistics
+    jdbc.audit      : Logs ALL JDBC calls except for ResultSets
+    jdbc.resultset  : all calls to ResultSet objects are logged
+    jdbc.connection : Logs connection open and close events
+    -->
+
+    <logger name="jdbc" level="OFF"/>
+    <logger name="jdbc.sqltiming" level="DEBUG"/>
+    <logger name="jdbc.resultsettable" level="OFF"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+
+    <root value="${LOG_LEVEL}">
+        <appender-ref ref="CONSOLE-ASYNC"/>
+    </root>
+</configuration>

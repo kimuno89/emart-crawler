@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <property name="LOG_LEVEL" value="INFO"/>
+    <property name="LOGS_ABSOLUTE_PATH" value="./logs"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] [%logger{30}] - %msg%n%ex</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <prudent>true</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_ABSOLUTE_PATH}/api-all-%d{yyyyMMdd}.log</fileNamePattern>
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] [%logger{30}] - %msg%n%ex</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE-ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <appender name="CONSOLE-ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <!--
+    jdbc.sqlonly    : Logs only SQL
+    jdbc.sqltiming  : Logs the SQL, post-execution, including timing execution statistics
+    jdbc.audit      : Logs ALL JDBC calls except for ResultSets
+    jdbc.resultset  : all calls to ResultSet objects are logged
+    jdbc.connection : Logs connection open and close events
+    -->
+
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="yhkim.crawler" level="INFO"/>
+    <logger name="io.lettuce" level="INFO"/>
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+    <logger name="org.hibernate" level="INFO"/>
+    <logger name="org.hibernate.type" level="INFO"/>
+
+    <logger name="jdbc" level="OFF"/>
+    <logger name="jdbc.sqltiming" level="INFO"/>
+
+    <root value="${LOG_LEVEL}">
+        <appender-ref ref="CONSOLE-ASYNC"/>
+        <appender-ref ref="FILE-ASYNC"/>
+    </root>
+
+
+</configuration>
